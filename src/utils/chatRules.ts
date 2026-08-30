@@ -6,7 +6,3 @@ export function getCompatibleProviders(myProvider: AuthProvider): AuthProvider[]
   }
   return ['password'];
 }
-
-export function canChat(myProvider: AuthProvider, otherProvider: AuthProvider): boolean {
-  return getCompatibleProviders(myProvider).includes(otherProvider);
-}
