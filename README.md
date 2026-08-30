@@ -134,12 +134,6 @@ cp1/
 
 ---
 
-## Prints da aplicacao
-
-> Adicione aqui capturas de tela do aplicativo em execucao.
-
----
-
 ## Integrantes
 
 - RM99943 - Pedro Oliveira
