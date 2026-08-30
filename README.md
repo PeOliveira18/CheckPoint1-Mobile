@@ -1,56 +1,147 @@
-# Welcome to your Expo app 👋
+# CP Chat
 
-This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
+Aplicativo de chat em tempo real desenvolvido com **React Native**, **Expo** e **Firebase**.
 
-## Get started
+---
 
-1. Install dependencies
+## Descrição
 
-   ```bash
-   npm install
-   ```
+Chat 1 para 1 com autenticação via e-mail/senha, Google e Apple. As mensagens são armazenadas e sincronizadas em tempo real usando o **Firebase Realtime Database**.
 
-2. Start the app
+A comunicação segue uma regra de provedores:
 
-   ```bash
-   npx expo start
-   ```
+| Usuário A        | Pode conversar com |
+|------------------|--------------------|
+| E-mail / Senha   | Google, Apple      |
+| Google           | E-mail / Senha     |
+| Apple            | E-mail / Senha     |
 
-In the output, you'll find options to open the app in a
+---
 
-- [development build](https://docs.expo.dev/develop/development-builds/introduction/)
-- [Android emulator](https://docs.expo.dev/workflow/android-studio-emulator/)
-- [iOS simulator](https://docs.expo.dev/workflow/ios-simulator/)
-- [Expo Go](https://expo.dev/go), a limited sandbox for trying out app development with Expo
+## Tecnologias
 
-You can start developing by editing the files inside the **app** directory. This project uses [file-based routing](https://docs.expo.dev/router/introduction).
+- React Native
+- Expo SDK **57**
+- TypeScript
+- Firebase Authentication
+- Firebase Realtime Database
+- `@react-native-google-signin/google-signin`
+- `expo-apple-authentication`
 
-## Get a fresh project
+---
 
-When you're ready, run:
+## Serviços Firebase
+
+- **Firebase Authentication** — cadastro, login e identificação dos usuários
+- **Firebase Realtime Database** — armazenamento e sincronização de mensagens em tempo real
+
+---
+
+## Como executar
+
+### Pré-requisitos
+
+- Node.js >= 20
+- Expo CLI (`npm install -g expo-cli`)
+- Conta no [Firebase Console](https://console.firebase.google.com/)
+
+### 1. Clone o repositório
 
 ```bash
-npm run reset-project
+git clone <url-do-repositorio>
+cd cp1
 ```
 
-This command will move the starter code to the **app-example** directory and create a blank **app** directory where you can start developing.
+### 2. Instale as dependências
 
-### Other setup steps
+```bash
+npm install
+```
 
-- To set up ESLint for linting, run `npx expo lint`, or follow our guide on ["Using ESLint and Prettier"](https://docs.expo.dev/guides/using-eslint/)
-- If you'd like to set up unit testing, follow our guide on ["Unit Testing with Jest"](https://docs.expo.dev/develop/unit-testing/)
-- Learn more about the TypeScript setup in this template in our guide on ["Using TypeScript"](https://docs.expo.dev/guides/typescript/)
+### 3. Configure o Firebase
 
-## Learn more
+1. Acesse o [Firebase Console](https://console.firebase.google.com/) e crie um projeto.
+2. Ative no console:
+   - **Authentication** → Sign-in method → habilite E-mail/Senha, Google e Apple
+   - **Realtime Database** → crie o banco e configure as regras de segurança (veja abaixo)
+3. Abra `src/services/firebase.ts` e substitua os valores de `firebaseConfig` com os do seu projeto.
+4. Para Google Sign-In, abra `src/screens/LoginScreen.tsx` e substitua `YOUR_WEB_CLIENT_ID` pelo Client ID OAuth do seu projeto.
 
-To learn more about developing your project with Expo, look at the following resources:
+### 4. Regras de segurança do Realtime Database
 
-- [Expo documentation](https://docs.expo.dev/): Learn fundamentals, or go into advanced topics with our [guides](https://docs.expo.dev/guides).
-- [Learn Expo tutorial](https://docs.expo.dev/tutorial/introduction/): Follow a step-by-step tutorial where you'll create a project that runs on Android, iOS, and the web.
+Cole o conteúdo do arquivo `database.rules.json` nas **Rules** do seu Realtime Database no Firebase Console.
 
-## Join the community
+### 5. Inicie o projeto
 
-Join our community of developers creating universal apps.
+```bash
+npx expo start
+```
 
-- [Expo on GitHub](https://github.com/expo/expo): View our open source platform and contribute.
-- [Discord community](https://chat.expo.dev): Chat with Expo users and ask questions.
+---
+
+## Configuração do Firebase
+
+### `src/services/firebase.ts`
+
+```ts
+const firebaseConfig = {
+  apiKey: 'SUA_API_KEY',
+  authDomain: 'SEU_AUTH_DOMAIN',
+  databaseURL: 'SUA_DATABASE_URL',
+  projectId: 'SEU_PROJECT_ID',
+  storageBucket: 'SEU_STORAGE_BUCKET',
+  messagingSenderId: 'SEU_SENDER_ID',
+  appId: 'SEU_APP_ID',
+};
+```
+
+---
+
+## Estrutura do projeto
+
+```
+cp1/
+  src/
+    app/
+      _layout.tsx       - Layout raiz (Expo Router)
+      index.tsx         - Ponto de entrada, navegacao por estado
+    components/
+      Loading.tsx
+      ErrorMessage.tsx
+      ChatMessageItem.tsx
+      ChatInput.tsx
+      UserItem.tsx
+    contexts/
+      AuthContext.tsx   - Contexto de autenticacao + useAuth
+    hooks/
+      useChat.ts        - Hook para mensagens em tempo real
+    screens/
+      LoginScreen.tsx
+      UsersScreen.tsx
+      ChatScreen.tsx
+    services/
+      firebase.ts       - Inicializacao do Firebase
+      authService.ts    - Login / Cadastro / Logout
+      userService.ts    - Salvar/buscar usuarios no DB
+      chatService.ts    - Conversas e mensagens
+    types/
+      user.ts
+      chat.ts
+    utils/
+      chatRules.ts      - Regra de compatibilidade entre provedores
+  database.rules.json   - Regras de seguranca do Realtime Database
+```
+
+---
+
+## Prints da aplicacao
+
+> Adicione aqui capturas de tela do aplicativo em execucao.
+
+---
+
+## Integrantes
+
+- RM99943 - Pedro Oliveira
+- RM557817 - Diego Cabral
+- RM555694 - Debora Ivanowski

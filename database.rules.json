@@ -1,0 +1,23 @@
+{
+  "rules": {
+    "users": {
+      ".read": "auth !== null",
+      ".indexOn": ["provider"],
+      "$uid": {
+        ".write": "auth !== null && auth.uid === $uid"
+      }
+    },
+    "conversations": {
+      "$conversationId": {
+        ".read": "auth !== null && (data.child('participants/0').val() === auth.uid || data.child('participants/1').val() === auth.uid || !data.exists())",
+        ".write": "auth !== null && (newData.child('participants/0').val() === auth.uid || newData.child('participants/1').val() === auth.uid)"
+      }
+    },
+    "messages": {
+      "$conversationId": {
+        ".read": "auth !== null && (root.child('conversations').child($conversationId).child('participants/0').val() === auth.uid || root.child('conversations').child($conversationId).child('participants/1').val() === auth.uid)",
+        ".write": "auth !== null && (root.child('conversations').child($conversationId).child('participants/0').val() === auth.uid || root.child('conversations').child($conversationId).child('participants/1').val() === auth.uid)"
+      }
+    }
+  }
+}
